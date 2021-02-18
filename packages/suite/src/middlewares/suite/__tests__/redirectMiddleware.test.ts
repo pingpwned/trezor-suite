@@ -17,13 +17,6 @@ import { Action } from '@suite-types';
 
 const { getSuiteDevice } = global.JestMocks;
 
-jest.mock('next/router', () => ({
-    __esModule: true, // this property makes it work
-    default: {
-        push: () => {},
-    },
-}));
-
 jest.mock('@suite-actions/storageActions', () => ({ __esModule: true }));
 
 type SuiteState = ReturnType<typeof suiteReducer>;
@@ -126,6 +119,7 @@ describe('redirectMiddleware', () => {
                             app: 'wallet',
                             params: ['symbol', 'accountIndex', 'accountType'],
                             isModal: undefined,
+                            exact: true,
                         },
                     },
                 ),

@@ -7,6 +7,7 @@
   - [Desktop Updates](releases/desktop_updates.md)
   - [Versioning](releases/versioning.md)
 - [Packages](packages/index.md)
+  - [Suite Build](packages/suite-build.md)
   - [Suite Desktop](packages/suite-desktop.md)
 - [Features](features/index.md)
   - [Metadata](features/metadata.md)

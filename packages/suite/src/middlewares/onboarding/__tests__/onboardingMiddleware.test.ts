@@ -11,13 +11,6 @@ import onboardingMiddlewares from '@onboarding-middlewares';
 
 const middlewares = [...onboardingMiddlewares];
 
-jest.mock('next/router', () => ({
-    __esModule: true, // this property makes it work
-    default: {
-        push: () => {},
-    },
-}));
-
 jest.mock('@trezor/suite-storage', () => ({
     __esModule: true, // this property makes it work
     default: () => {},
@@ -105,6 +98,7 @@ describe('onboardingMiddleware', () => {
                         app: 'onboarding',
                         isModal: true,
                         params: ['cancelable'],
+                        exact: undefined,
                     },
                 }),
             );

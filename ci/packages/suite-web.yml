@@ -21,7 +21,7 @@ suite-web build dev:
   script:
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
     - yarn build:libs
-    - assetPrefix=/suite-web/${CI_BUILD_REF_NAME}/web yarn workspace @trezor/suite-web build
+    - ASSET_PREFIX=/suite-web/${CI_BUILD_REF_NAME}/web yarn workspace @trezor/suite-web build
   artifacts:
     expire_in: 7 days
     paths:
@@ -36,7 +36,7 @@ suite-web build beta:
   script:
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
     - yarn build:libs
-    - assetPrefix=/wallet/web yarn workspace @trezor/suite-web build
+    - ASSET_PREFIX=/wallet/web yarn workspace @trezor/suite-web build
   artifacts:
     expire_in: 7 days
     paths:
@@ -55,7 +55,7 @@ suite-web build stable:
   script:
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
     - yarn build:libs
-    - assetPrefix=/web yarn workspace @trezor/suite-web build
+    - ASSET_PREFIX=/web yarn workspace @trezor/suite-web build
   artifacts:
     expire_in: 7 days
     paths:
@@ -112,7 +112,7 @@ suite-web deploy dev:
   variables:
     COMPOSE_PROJECT_NAME: $CI_JOB_ID
     COMPOSE_FILE: ./docker/docker-compose.suite-ci.yml
-    # corresponds with the NextJs assetPrefix. Tells Cypress where is the index of application
+    # corresponds with the environment variable ASSET_PREFIX defined in webpack config. Tells Cypress where is the index of application
     CYPRESS_ASSET_PREFIX: /web
     CYPRESS_baseUrl: ${DEV_SERVER_URL}/suite-web/${CI_BUILD_REF_NAME}
     # should tests do snapshot testing

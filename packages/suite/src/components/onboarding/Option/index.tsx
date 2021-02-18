@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button, variables } from '@trezor/components';
 
-import { resolveStaticPath } from '@suite-utils/nextjs';
+import { resolveStaticPath } from '@suite-utils/build';
 
 const { FONT_SIZE } = variables;
 

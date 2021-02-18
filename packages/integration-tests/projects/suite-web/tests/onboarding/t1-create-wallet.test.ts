@@ -15,7 +15,7 @@ describe('Onboarding - create wallet', () => {
     it('Success (basic)', () => {
         cy.getTestElement('@onboarding/path-used-button').click();
         cy.getTestElement('@onboarding/pair-device-step');
-        
+
         cy.task('startEmu', { version: '1.9.0', wipe: true });
         cy.wait(1000);
 
