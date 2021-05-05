@@ -62,6 +62,7 @@ const SendCryptoInput = () => {
 
     return (
         <StyledInput
+            data-test="@coinmarket/exchange/crypto-input"
             onChange={event => {
                 updateFiatValue(event.target.value);
                 clearErrors(FIAT_INPUT);
