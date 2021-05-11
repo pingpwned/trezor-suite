@@ -51,23 +51,19 @@ const fiatRatesMiddleware = (api: MiddlewareAPI<Dispatch, AppState>) => (next: D
         case ACCOUNT.CREATE: {
             // fetch current rates for account's tokens
             const account = action.payload;
-            if (account.tokens) {
-                account.tokens.forEach((t, i) => {
-                    if (t.symbol) {
-                        const s = t.symbol;
-                        // wait 500ms before firing next fetch
-                        setTimeout(() => {
-                            api.dispatch(
-                                fiatRatesActions.updateCurrentRates({
-                                    symbol: s,
-                                    mainNetworkSymbol: account.symbol,
-                                    tokenAddress: t.address,
-                                }),
-                            );
-                        }, i * 500);
-                    }
-                });
-            }
+            account.tokens?.forEach(t => {
+                if (!t.symbol) {
+                    return;
+                }
+                api.dispatch(
+                    fiatRatesActions.updateCurrentRates({
+                        symbol: t.symbol!,
+                        mainNetworkSymbol: account.symbol,
+                        tokenAddress: t.address,
+                    }),
+                );
+            });
+
             break;
         }
         case WALLET_SETTINGS.CHANGE_NETWORKS:
