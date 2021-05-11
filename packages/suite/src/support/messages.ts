@@ -1969,6 +1969,10 @@ const definedMessages = defineMessages({
         description: 'Link to Trezor wiki.',
         id: 'TR_LEARN_MORE',
     },
+    TR_LEARN_AND_DISCOVER: {
+        defaultMessage: 'Learn & discover',
+        id: 'TR_LEARN_AND_DISCOVER',
+    },
     TR_SEGWIT_ACCOUNTS: {
         defaultMessage: 'Segwit accounts',
         id: 'TR_SEGWIT_ACCOUNTS',

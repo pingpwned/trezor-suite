@@ -1,14 +1,26 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useTheme, Icon, IconProps, variables } from '@trezor/components';
 
-const Wrapper = styled.div<Pick<Props, 'isActive' | 'desktopMarginLeft' | 'desktopMarginRight'>>`
+const Wrapper = styled.div<Pick<Props, 'isActive' | 'marginLeft'>>`
+    width: 45px;
+    height: 45px;
     display: flex;
     position: relative;
     cursor: pointer;
     align-items: center;
-    margin-left: ${props => props.desktopMarginLeft || '0px'};
-    margin-right: ${props => props.desktopMarginRight || '0px'};
+    justify-content: center;
+    border-radius: 8px;
+    ${props => props.marginLeft && `margin-left: 8px`};
+
+    ${props =>
+        props.isActive &&
+        css`
+            &,
+            &:hover {
+                background: ${props.theme.BG_GREY};
+            }
+        `}
 `;
 
 const MobileWrapper = styled.div<Pick<Props, 'isActive'>>`
@@ -40,8 +52,8 @@ const Label = styled.span`
 
 const AlertDotWrapper = styled.div`
     position: absolute;
-    top: 0px;
-    right: 2px;
+    top: 10px;
+    right: 10px;
     width: 9px;
     height: 9px;
     border-radius: 50%;
@@ -64,8 +76,7 @@ interface CommonProps extends Pick<React.HTMLAttributes<HTMLDivElement>, 'onClic
     isActive?: boolean;
     withAlertDot?: boolean;
     isMobileLayout?: boolean;
-    desktopMarginLeft?: string;
-    desktopMarginRight?: string;
+    marginLeft?: boolean;
 }
 
 interface CustomIconComponentProps extends CommonProps {

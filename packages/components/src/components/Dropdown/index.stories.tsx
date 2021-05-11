@@ -15,6 +15,9 @@ storiesOf('Dropdown', module).add('Dropdown', () => {
     );
     const isDisabled = boolean('isDisabled', false);
     const offset = number('offset', 10);
+    const horizontalPadding = number('Horizontal padding', 0);
+    const topPadding = number('Top padding', 8);
+    const bottomPadding = number('Bottom padding', 8);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -22,6 +25,9 @@ storiesOf('Dropdown', module).add('Dropdown', () => {
                 {...(alignMenu ? { alignMenu } : {})}
                 {...(offset ? { offset } : {})}
                 {...(isDisabled ? { isDisabled } : {})}
+                horizontalPadding={horizontalPadding}
+                topPadding={topPadding}
+                bottomPadding={bottomPadding}
                 items={[
                     // {
                     //     options: [
@@ -55,7 +61,7 @@ storiesOf('Dropdown', module).add('Dropdown', () => {
                     },
                     {
                         key: '2',
-                        label: 'Group 2',
+                        label: 'Group 2 - with rounded items',
                         options: [
                             {
                                 key: '1',
@@ -63,6 +69,7 @@ storiesOf('Dropdown', module).add('Dropdown', () => {
                                 callback: () => {
                                     console.log('item 3 clicked');
                                 },
+                                isRounded: true,
                             },
                             {
                                 key: '2',
@@ -70,15 +77,18 @@ storiesOf('Dropdown', module).add('Dropdown', () => {
                                 callback: () => {
                                     console.log('disabled item clicked');
                                 },
+                                isRounded: true,
                                 isDisabled: true,
                             },
 
                             {
                                 key: '3',
-                                label: 'item 4',
+                                label: 'item with iconRight',
                                 callback: () => {
                                     console.log('item 4 clicked');
                                 },
+                                iconRight: 'ARROW_RIGHT',
+                                isRounded: true,
                             },
                         ],
                     },

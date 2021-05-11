@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import * as walletSettingsActions from '@settings-actions/walletSettingsActions';
 import * as suiteActions from '@suite-actions/suiteActions';
 import * as routerActions from '@suite-actions/routerActions';
@@ -11,6 +11,7 @@ import ActionItem from './components/ActionItem';
 import TooltipContentTor from './components/TooltipContentTor';
 import { isDesktop } from '@suite-utils/env';
 import NotificationsDropdown from './components/NotificationsDropdown';
+import SettingsDropdown from './components/SettingsDropdown';
 
 const DESKTOP_LAYOUT_ICONS_MARGIN = '28px';
 
@@ -48,17 +49,8 @@ const ActionsContainer = styled.div<{ desktop: boolean; mobileLayout?: boolean }
     `}
 `;
 
-const ActionItemTor = styled.div<{ mobileLayout?: boolean }>`
-    ${props =>
-        !props.mobileLayout &&
-        `display: flex;
-        position: relative;
-        align-items: center;
-    `}
-    ${props =>
-        props.mobileLayout &&
-        `border-top: 1px solid ${props.theme.STROKE_GREY};
-    `}
+const ActionItemWrapper = styled.div`
+    position: relative;
 `;
 
 const ActionItemTorIndicator = styled.div`
@@ -69,8 +61,16 @@ const ActionItemTorIndicator = styled.div`
     width: 10px;
     border-radius: 50%;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 10px;
+    right: 10px;
+`;
+
+const Separator = styled.div`
+    border: 1px solid ${props => props.theme.STROKE_GREY};
+    height: 38px;
+    width: 0;
+    margin: 0 10px;
+    opacity: 0.7;
 `;
 
 interface Props {
@@ -121,6 +121,58 @@ const NavigationActions = (props: Props) => {
 
     return (
         <WrapperComponent>
+            <ActionItem
+                onClick={() => {
+                    analytics.report({
+                        type: 'menu/toggle-discreet',
+                        payload: {
+                            value: !discreetMode,
+                        },
+                    });
+                    setDiscreetMode(!discreetMode);
+                }}
+                isActive={discreetMode}
+                label={<Translation id="TR_DISCREET" />}
+                icon={discreetMode ? 'HIDE' : 'SHOW'}
+                isMobileLayout={props.isMobileLayout}
+            />
+
+            <ActionItemWrapper>
+                <ActionItem
+                    onClick={() => {
+                        analytics.report({
+                            type: 'menu/toggle-tor',
+                            payload: {
+                                value: !tor,
+                            },
+                        });
+                        window.desktopApi!.toggleTor(!tor);
+                    }}
+                    isActive={tor}
+                    label={<Translation id="TR_TOR" />}
+                    icon="TOR"
+                    isMobileLayout={props.isMobileLayout}
+                    marginLeft
+                />
+                {tor && (
+                    <ActionItemTorIndicator>
+                        <Icon icon="CHECK" size={10} color={themeColors.TYPE_GREEN} />
+                    </ActionItemTorIndicator>
+                )}
+            </ActionItemWrapper>
+
+            <Separator />
+
+            {isDesktop() && (
+                <Tooltip
+                    placement="bottom"
+                    content={
+                        <TooltipContentTor active={tor} action={() => action('settings-index')} />
+                    }
+                    {...props}
+                ></Tooltip>
+            )}
+
             {props.isMobileLayout ? (
                 <ActionItem
                     label={<Translation id="TR_NOTIFICATIONS" />}
@@ -132,78 +184,23 @@ const NavigationActions = (props: Props) => {
                     isMobileLayout={props.isMobileLayout}
                 />
             ) : (
-                <NotificationsDropdown withAlertDot={unseenNotifications} />
+                <NotificationsDropdown withAlertDot={!unseenNotifications} />
             )}
 
-            <ActionItem
-                label={<Translation id="TR_SETTINGS" />}
-                data-test="@suite/menu/settings-index"
-                onClick={() => action('settings-index')}
-                isActive={getIfRouteIsActive('settings-index')}
-                icon="SETTINGS"
-                isMobileLayout={props.isMobileLayout}
-                desktopMarginLeft={DESKTOP_LAYOUT_ICONS_MARGIN}
-            />
-
-            <ActionsContainer desktop={isDesktop()} mobileLayout={props.isMobileLayout}>
+            {props.isMobileLayout ? (
                 <ActionItem
-                    onClick={() => {
-                        analytics.report({
-                            type: 'menu/toggle-discreet',
-                            payload: {
-                                value: !discreetMode,
-                            },
-                        });
-                        setDiscreetMode(!discreetMode);
-                    }}
-                    isActive={discreetMode}
-                    label={<Translation id="TR_DISCREET" />}
-                    icon={discreetMode ? 'HIDE' : 'SHOW'}
+                    label={<Translation id="TR_SETTINGS" />}
+                    data-test="@suite/menu/settings-index"
+                    onClick={() => action('settings-index')}
+                    isActive={getIfRouteIsActive('settings-index')}
+                    icon="SETTINGS"
                     isMobileLayout={props.isMobileLayout}
+                    marginLeft
                 />
-                {isDesktop() && (
-                    <ActionItemTor mobileLayout={props.isMobileLayout}>
-                        <Tooltip
-                            placement="bottom"
-                            content={
-                                <TooltipContentTor
-                                    active={tor}
-                                    action={() => action('settings-index')}
-                                />
-                            }
-                            {...props}
-                        >
-                            <>
-                                <ActionItem
-                                    onClick={() => {
-                                        analytics.report({
-                                            type: 'menu/toggle-tor',
-                                            payload: {
-                                                value: !tor,
-                                            },
-                                        });
-                                        window.desktopApi!.toggleTor(!tor);
-                                    }}
-                                    isActive={tor}
-                                    label={<Translation id="TR_TOR" />}
-                                    icon="TOR"
-                                    isMobileLayout={props.isMobileLayout}
-                                    desktopMarginLeft={DESKTOP_LAYOUT_ICONS_MARGIN}
-                                />
-                                {tor && (
-                                    <ActionItemTorIndicator>
-                                        <Icon
-                                            icon="CHECK"
-                                            size={10}
-                                            color={themeColors.TYPE_GREEN}
-                                        />
-                                    </ActionItemTorIndicator>
-                                )}
-                            </>
-                        </Tooltip>
-                    </ActionItemTor>
-                )}
-            </ActionsContainer>
+            ) : (
+                <SettingsDropdown />
+            )}
+
         </WrapperComponent>
     );
 };

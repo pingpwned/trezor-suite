@@ -26,7 +26,8 @@ const Menu = styled.ul<MenuProps>`
     min-width: 140px;
     box-shadow: 0 1px 2px 0 ${props => props.theme.BOX_SHADOW_BLACK_20};
     z-index: 10001;
-    padding: ${props => props.verticalPadding}px 0px;
+    padding: ${props => props.topPadding}px ${props => props.horizontalPadding}px
+        ${props => props.bottomPadding}px;
 
     ${props =>
         props.coords &&
@@ -93,6 +94,12 @@ const MenuItem = styled.li<MenuItemProps>`
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 
     ${props =>
+        props.item.isRounded &&
+        css`
+            border-radius: 4px;
+        `}
+
+    ${props =>
         !props.item.isDisabled &&
         !props.item.noHover &&
         css`
@@ -106,13 +113,20 @@ const IconWrapper = styled.div`
     margin-right: 16px;
 `;
 
+const IconRight = styled(Icon)`
+    flex: 1;
+    justify-self: flex-end;
+`;
+
 interface DropdownMenuItem {
     key: string;
     label: React.ReactNode;
     callback?: () => any | Promise<any>;
     icon?: IconProps['icon'] | JSX.Element;
+    iconRight?: IconProps['icon'];
     isDisabled?: boolean;
     isHidden?: boolean;
+    isRounded?: boolean;
     noPadding?: boolean;
     noHover?: boolean;
     'data-test'?: string;
@@ -132,7 +146,9 @@ interface MenuProps {
     coords?: Coords;
     menuSize?: Coords;
     offset?: number;
-    verticalPadding?: number;
+    topPadding?: number;
+    bottomPadding?: number;
+    horizontalPadding?: number;
 }
 
 interface Props extends MenuProps, React.ButtonHTMLAttributes<HTMLDivElement> {
@@ -168,7 +184,9 @@ const Dropdown = forwardRef(
             alignMenu = 'left',
             offset = 10,
             appendTo,
-            verticalPadding = 8,
+            topPadding = 8,
+            bottomPadding = 8,
+            horizontalPadding = 0,
             onToggle,
             ...rest
         }: Props,
@@ -300,6 +318,9 @@ const Dropdown = forwardRef(
                 menuSize={menuSize}
                 offset={offset}
                 coords={absolutePosition ? coords : undefined}
+                topPadding={topPadding}
+                bottomPadding={bottomPadding}
+                horizontalPadding={horizontalPadding}
             >
                 {visibleItems.map((group, i) => (
                     <React.Fragment key={group.key}>
@@ -315,7 +336,14 @@ const Dropdown = forwardRef(
                                 item={item}
                             >
                                 {getIconComponent(item)}
-                                {item.label}
+                                <span>{item.label}</span>
+                                {item.iconRight && (
+                                    <IconRight
+                                        icon={item.iconRight}
+                                        size={16}
+                                        color={theme.TYPE_DARK_GREY}
+                                    />
+                                )}
                             </MenuItemComponent>
                         ))}
                     </React.Fragment>
