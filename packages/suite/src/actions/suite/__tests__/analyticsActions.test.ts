@@ -60,15 +60,8 @@ describe('Analytics Actions', () => {
         };
     });
     beforeEach(() => {
-        const mockSuccessResponse = {};
-        const mockJsonPromise = Promise.resolve(mockSuccessResponse);
-        const mockFetchPromise = Promise.resolve({
-            json: () => mockJsonPromise,
-        });
-        // @ts-ignore
-        global.fetch = jest.fn().mockImplementation(() => mockFetchPromise);
-        // @ts-ignore
-        jest.spyOn(global, 'fetch').mockImplementation(() => mockFetchPromise);
+        navigator.sendBeacon = jest.fn().mockImplementation((_url, _data?) => true);
+        jest.spyOn(navigator, 'sendBeacon').mockImplementation((_url, _data?) => true);
     });
 
     afterAll(() => {
@@ -85,10 +78,9 @@ describe('Analytics Actions', () => {
         const store = initStore(state);
         store.dispatch(analyticsActions.report({ type: 'switch-device/eject' }));
         // @ts-ignore
-        expect(global.fetch).toHaveBeenNthCalledWith(
+        expect(navigator.sendBeacon).toHaveBeenNthCalledWith(
             1,
-            `https://data.trezor.io/suite/log/desktop/stable.log?c_v=${analyticsActions.version}&c_type=switch-device%2Feject&c_instance_id=1&c_session_id=very-random`,
-            { method: 'GET' },
+            `https://data.trezor.io/suite/log/desktop/develop.log?c_v=${analyticsActions.version}&c_type=switch-device%2Feject&c_instance_id=1&c_session_id=very-random`,
         );
         process.env.SUITE_TYPE = env;
     });
@@ -102,10 +94,9 @@ describe('Analytics Actions', () => {
         const store = initStore(state);
         store.dispatch(analyticsActions.report({ type: 'switch-device/eject' }));
         // @ts-ignore
-        expect(global.fetch).toHaveBeenNthCalledWith(
+        expect(navigator.sendBeacon).toHaveBeenNthCalledWith(
             1,
             `https://data.trezor.io/suite/log/web/develop.log?c_v=${analyticsActions.version}&c_type=switch-device%2Feject&c_instance_id=1&c_session_id=very-random`,
-            { method: 'GET' },
         );
         process.env.SUITE_TYPE = env;
     });
@@ -117,7 +108,7 @@ describe('Analytics Actions', () => {
         const store = initStore(state);
         store.dispatch(analyticsActions.report({ type: 'switch-device/eject' }));
         // @ts-ignore
-        expect(global.fetch).toHaveBeenCalledTimes(0);
+        expect(navigator.sendBeacon).toHaveBeenCalledTimes(0);
     });
 
     it('analyticsActions.report() - enabled: false, force: false', () => {
@@ -129,7 +120,7 @@ describe('Analytics Actions', () => {
         const store = initStore(state);
         store.dispatch(analyticsActions.report({ type: 'switch-device/eject' }));
         // @ts-ignore
-        expect(global.fetch).toHaveBeenCalledTimes(0);
+        expect(navigator.sendBeacon).toHaveBeenCalledTimes(0);
         process.env.SUITE_TYPE = env;
     });
 

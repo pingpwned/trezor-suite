@@ -1,9 +1,8 @@
 # Analytics
 
-Suite collects anonymous data on how user interacts with the application. This feature is by default "on". User has to opt-out either on analytics screen that follows 
-after welcome screen (if starting Suite for the first time) or by unchecking switch in settings.
+Suite collects anonymous data on how user interacts with the application. This feature is by default "on". User has to opt-out either on analytics screen that follows after welcome screen (if starting Suite for the first time) or by unchecking switch in settings.
 
-Data is transferred in GET requests encoded in uri.
+Data is transferred in POST requests via Beacon API encoded in uri.
 
 ## Catalogue of events
 
@@ -33,13 +32,13 @@ List of available configured endpoints:
 
 Currently used endpoints:
 
-| env                          | Are                                                 |
-| ---------------------------- |--------------------------------------------------   |
-| staging-suite.trezor.io      | https://data.trezor.io/suite/log/web/staging.log    |
-| beta-wallet.trezor.io        | https://data.trezor.io/suite/log/web/beta.log       |
-| suite.trezor.io              | https://data.trezor.io/suite/log/web/stable.log     |
-| any origin                   | https://data.trezor.io/suite/log/web/develop.log    |
-| desktop                      | https://data.trezor.io/suite/log/desktop/stable.log   |
+| environment   | branch                       | URL                                                 |
+| ------------- | ---------------------------- |--------------------------------------------------   |
+| desktop       | codesign branch              | https://data.trezor.io/suite/log/desktop/stable.log |
+| desktop       | other branches               | https://data.trezor.io/suite/log/desktop/dev.log    |
+| web           | codesign branch              | https://data.trezor.io/suite/log/web/stable.log     |
+| web           | other branches               | https://data.trezor.io/suite/log/web/develop.log    |
+| *web/desktop* | *localhost*                  | *is not tracked*                                    |
 
 ## Versioning
 
@@ -49,6 +48,10 @@ Breaking change should bump major version. Any other change bumps minor version.
 
 ## Changelog
 
+### 1.9
+Changed:
+- use POST request method using `Beacon API` instead of GET request method using `Fetch API` to report events
+- use `stable.log` for codesign builds and `develop.log` otherwise
 ### 1.8
 Added: 
 - settings/device/update-auto-lock
@@ -72,8 +75,10 @@ Fixed:
 - analytics/dispose
 
 Removed:
- - menu/goto/exchange-index
+- menu/goto/exchange-index
  
+Changed:
+- `desktop` build is now tracked to `stable.log` instead of `beta.log`
 ### 1.7
 Added:
 - send-raw-transaction

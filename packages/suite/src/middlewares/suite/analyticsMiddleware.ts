@@ -20,6 +20,7 @@ import {
     getWindowHeight,
 } from '@suite-utils/env';
 import { isBitcoinOnly, getPhysicalDeviceCount } from '@suite-utils/device';
+import { setSentryUser, unsetSentryUser } from '@suite/utils/suite/sentry';
 
 /*
     In analytics middleware we may intercept actions we would like to log. For example:
@@ -122,19 +123,16 @@ const analytics = (api: MiddlewareAPI<Dispatch, AppState>) => (next: Dispatch) =
             if (action.key === 'initialRun' && action.value === false) {
                 if (state.analytics.enabled) {
                     api.dispatch(
-                        analyticsActions.report(
-                            {
-                                type: 'initial-run-completed',
-                                payload: {
-                                    analytics: true,
-                                    createSeed: state.onboarding.path.includes('create'),
-                                    recoverSeed: state.onboarding.path.includes('recovery'),
-                                    newDevice: state.onboarding.path.includes('new'),
-                                    usedDevice: state.onboarding.path.includes('used'),
-                                },
+                        analyticsActions.report({
+                            type: 'initial-run-completed',
+                            payload: {
+                                analytics: true,
+                                createSeed: state.onboarding.path.includes('create'),
+                                recoverSeed: state.onboarding.path.includes('recovery'),
+                                newDevice: state.onboarding.path.includes('new'),
+                                usedDevice: state.onboarding.path.includes('used'),
                             },
-                            false,
-                        ),
+                        }),
                     );
                 } else {
                     api.dispatch(
@@ -179,9 +177,11 @@ const analytics = (api: MiddlewareAPI<Dispatch, AppState>) => (next: Dispatch) =
             break;
         case ANALYTICS.ENABLE:
             api.dispatch(analyticsActions.report({ type: 'analytics/enable' }));
+            setSentryUser(state.analytics.instanceId!);
             break;
         case ANALYTICS.DISPOSE:
             api.dispatch(analyticsActions.report({ type: 'analytics/dispose' }, true));
+            unsetSentryUser();
             break;
         case SUITE.AUTH_DEVICE:
             api.dispatch(
