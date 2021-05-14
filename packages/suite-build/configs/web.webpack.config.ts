@@ -11,6 +11,16 @@ import { FLAGS } from '../../suite/src/config/suite/features';
 import { assetPrefix, isDev } from '../utils/env';
 import { getPathForProject } from '../utils/path';
 
+// Configuration for HTML output (html-webpack-plugin)
+const htmlConfig = {
+    minify: false, // !isDev,
+    templateParameters: {
+        assetPrefix,
+        isOnionLocation: FLAGS.ONION_LOCATION_META,
+    },
+    inject: 'body' as const,
+};
+
 const baseDir = getPathForProject('web');
 const config: webpack.Configuration = {
     entry: [path.join(baseDir, 'src', 'index.ts')],
@@ -59,22 +69,14 @@ const config: webpack.Configuration = {
         ...routes.map(
             route =>
                 new HtmlWebpackPlugin({
-                    minify: !isDev,
+                    ...htmlConfig,
                     template: path.join(baseDir, 'src', 'static', 'index.html'),
-                    templateParameters: {
-                        assetPrefix,
-                        isOnionLocation: FLAGS.ONION_LOCATION_META,
-                    },
                     filename: path.join(baseDir, 'build', route.pattern, 'index.html'),
                 }),
         ),
         new HtmlWebpackPlugin({
-            minify: !isDev,
+            ...htmlConfig,
             template: path.join(baseDir, 'src', 'static', '404.html'),
-            templateParameters: {
-                assetPrefix,
-                isOnionLocation: FLAGS.ONION_LOCATION_META,
-            },
             filename: path.join(baseDir, 'build', '404.html'),
         }),
         // PWA

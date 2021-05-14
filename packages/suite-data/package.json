@@ -9,7 +9,7 @@
     "license": "SEE LICENSE IN LICENSE.md",
     "description": "Trezor data",
     "scripts": {
-        "build:lib": "yarn browser-detection && yarn msg-system-types",
+        "build:lib": "yarn msg-system-types",
         "copy-static-files": "ts-node ./index.ts",
         "test-same-svgs": "ts-node ./test/test-same-svgs.ts",
         "msg-system-types": "ts-node ./src/message-system/scripts/generate-types.ts",
