@@ -107,6 +107,8 @@ suite-web deploy dev:
 
 .e2e web:
   stage: integration testing
+  before_script:
+  - docker login $CI_DEPENDENCY_PROXY_SERVER -u $CI_DEPENDENCY_PROXY_USER -p $CI_DEPENDENCY_PROXY_PASSWORD
   needs:
     - suite-web deploy dev
   variables:
