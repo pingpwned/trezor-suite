@@ -13,6 +13,10 @@ import { splitToFixedFloatQuotes } from '@wallet-utils/coinmarket/exchangeUtils'
 import networks from '@wallet-config/networks';
 import { getUnusedAddressFromAccount } from '@wallet-utils/coinmarket/coinmarketUtils';
 import { useCoinmarketRecomposeAndSign } from './useCoinmarketRecomposeAndSign ';
+import BigNumber from 'bignumber.js';
+import { ExtendedMessageDescriptor } from '@suite/types/suite';
+import TrezorConnect from 'trezor-connect';
+import { getNetwork } from '@suite/utils/wallet/accountUtils';
 
 const getReceiveAccountSymbol = (
     symbol?: string,
@@ -48,6 +52,7 @@ export const useOffers = (props: Props) => {
     const [callInProgress, setCallInProgress] = useState<boolean>(isLocked() || false);
     const [selectedQuote, setSelectedQuote] = useState<ExchangeTrade>();
     const [receiveAccount, setReceiveAccount] = useState<Account | undefined>();
+    const [receiveAddress, setReceiveAddress] = useState<string | undefined>();
     const [suiteReceiveAccounts, setSuiteReceiveAccounts] = useState<
         ContextValues['suiteReceiveAccounts']
     >();
@@ -220,6 +225,46 @@ export const useOffers = (props: Props) => {
         }
     };
 
+    const [formNoteTranslationId, setFormNoteTranslationId] = useState<
+        ExtendedMessageDescriptor['id'] | undefined
+    >();
+
+    useEffect(() => {
+        setFormNoteTranslationId(undefined);
+        if (receiveAccount && receiveAccount.networkType === 'ethereum') {
+            // receive address/account is inside Suite
+            setFormNoteTranslationId(
+                new BigNumber(receiveAccount.formattedBalance).isZero()
+                    ? 'TR_EXCHANGE_RECEIVING_ADDRESS_HAS_ZERO_BALANCE'
+                    : undefined,
+            );
+        } else if (
+            receiveAddress &&
+            receiveSymbol &&
+            getNetwork(receiveSymbol)?.networkType === 'ethereum'
+        ) {
+            // receive address/account is outside of Suite
+            const setFormNoteTranslationIdByAddressBalance = async () => {
+                setCallInProgress(true);
+                const result = await TrezorConnect.getAccountInfo({
+                    coin: receiveSymbol,
+                    descriptor: receiveAddress,
+                    details: 'basic',
+                });
+                setCallInProgress(false);
+                if (result.success) {
+                    const balance = new BigNumber(result.payload.balance);
+                    setFormNoteTranslationId(
+                        balance.isZero()
+                            ? 'TR_EXCHANGE_RECEIVING_ADDRESS_HAS_ZERO_BALANCE'
+                            : undefined,
+                    );
+                }
+            };
+            setFormNoteTranslationIdByAddressBalance();
+        }
+    }, [receiveAccount, receiveAddress, receiveSymbol]);
+
     return {
         callInProgress,
         confirmTrade,
@@ -243,6 +288,8 @@ export const useOffers = (props: Props) => {
         receiveSymbol,
         receiveAccount,
         setReceiveAccount,
+        setReceiveAddress,
+        formNoteTranslationId,
     };
 };
 

@@ -25,6 +25,8 @@ import { useFees } from './form/useFees';
 import { useCompose } from './form/useCompose';
 import { DEFAULT_PAYMENT, DEFAULT_VALUES } from '@wallet-constants/sendForm';
 import { ExtendedMessageDescriptor } from '@suite/types/suite';
+import { formatNetworkAmount } from '@suite/utils/wallet/accountUtils';
+import BigNumber from 'bignumber.js';
 
 export const ExchangeFormContext = createContext<ExchangeFormContextValues | null>(null);
 ExchangeFormContext.displayName = 'CoinmarketExchangeContext';
@@ -259,6 +261,26 @@ export const useCoinmarketExchangeForm = (props: Props): ExchangeFormContextValu
     let formNoteTranslationId: ExtendedMessageDescriptor['id'] | undefined;
     if (!isDeviceConnected) {
         formNoteTranslationId = 'TR_EXCHANGE_CONNECT_DEVICE_TO_CONTINUE';
+    } else if (account.networkType === 'ethereum') {
+        const hasAccountTokens = account.tokens?.some(
+            token => token.balance && new BigNumber(token.balance).isGreaterThan(0),
+        );
+        const selectedOption = getValues('selectedFee') || 'normal';
+        const transactionInfo = composedLevels ? composedLevels[selectedOption] : undefined;
+        const wantsToExchangeAllBalance =
+            transactionInfo &&
+            transactionInfo.type !== 'error' &&
+            !transactionInfo.token &&
+            new BigNumber(account.formattedBalance).isEqualTo(
+                new BigNumber(getValues(CRYPTO_INPUT)).plus(
+                    formatNetworkAmount(transactionInfo.fee, account.symbol),
+                ),
+            );
+
+        if (hasAccountTokens && wantsToExchangeAllBalance) {
+            formNoteTranslationId =
+                'TR_EXCHANGE_TOKENS_NOT_TRANSFERABLE_AFTER_ALL_BALANCE_EXCHANGE';
+        }
     }
 
     return {

@@ -29,12 +29,13 @@ const Footer = () => {
         isComposing,
         canCompareOffers,
         formNoteTranslationId,
+        account,
     } = useCoinmarketExchangeFormContext();
     const hasValues = !!watch(CRYPTO_INPUT) && !!watch('receiveCryptoSelect')?.value;
     const formIsValid = Object.keys(errors).length === 0;
 
     const isCompareOffersButtonDisabled =
-        !canCompareOffers && (!(formIsValid && hasValues) || formState.isSubmitting);
+        !canCompareOffers || !(formIsValid && hasValues) || formState.isSubmitting;
 
     return (
         <>
@@ -52,7 +53,10 @@ const Footer = () => {
             {formNoteTranslationId && (
                 <Wrapper>
                     <Center>
-                        <Translation id={formNoteTranslationId} />
+                        <Translation
+                            id={formNoteTranslationId}
+                            values={{ symbol: account.symbol.toUpperCase() }}
+                        />
                     </Center>
                 </Wrapper>
             )}

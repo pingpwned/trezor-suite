@@ -98,6 +98,7 @@ const Footer = () => {
         isComposing,
         canShowOffers,
         formNoteTranslationId,
+        account,
     } = useCoinmarketSellFormContext();
     const countrySelect = 'countrySelect';
     const hasValues =
@@ -106,7 +107,7 @@ const Footer = () => {
     const formIsValid = Object.keys(errors).length === 0;
 
     const isShowOffersButtonDisabled =
-        !canShowOffers && (!(formIsValid && hasValues) || formState.isSubmitting);
+        !canShowOffers || !(formIsValid && hasValues) || formState.isSubmitting;
 
     return (
         <>
@@ -173,7 +174,10 @@ const Footer = () => {
             <Center>
                 {formNoteTranslationId && (
                     <FormNoteWrapper>
-                        <Translation id={formNoteTranslationId} />
+                        <Translation
+                            id={formNoteTranslationId}
+                            values={{ symbol: account.symbol.toUpperCase() }}
+                        />
                     </FormNoteWrapper>
                 )}
             </Center>

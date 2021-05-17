@@ -275,6 +275,15 @@ const definedMessages = defineMessages({
         defaultMessage: 'Connect your device to continue.',
         id: 'TR_EXCHANGE_CONNECT_DEVICE_TO_CONTINUE',
     },
+    TR_EXCHANGE_TOKENS_NOT_TRANSFERABLE_AFTER_ALL_BALANCE_EXCHANGE: {
+        defaultMessage: 'Your tokens will not be transferable after you exchange all {symbol}.',
+        id: 'TR_EXCHANGE_TOKENS_NOT_TRANSFERABLE_AFTER_ALL_BALANCE_EXCHANGE',
+    },
+    TR_EXCHANGE_RECEIVING_ADDRESS_HAS_ZERO_BALANCE: {
+        defaultMessage:
+            'Receiving address has zero {symbol}. You will not be able to move your tokens.',
+        id: 'TR_EXCHANGE_RECEIVING_ADDRESS_HAS_ZERO_BALANCE',
+    },
     TR_EXCHANGE_OFFERS_REFRESH: {
         defaultMessage: 'Refresh in',
         id: 'TR_EXCHANGE_OFFERS_REFRESH',
@@ -746,6 +755,10 @@ const definedMessages = defineMessages({
     TR_SELL_CONNECT_DEVICE_TO_CONTINUE: {
         defaultMessage: 'Connect your device to continue.',
         id: 'TR_EXCHANGE_CONNECT_DEVICE_TO_CONTINUE',
+    },
+    TR_SELL_TOKENS_NOT_TRANSFERABLE_AFTER_ALL_BALANCE_SELL: {
+        defaultMessage: 'Your tokens will not be transferable after you sell all {symbol}.',
+        id: 'TR_SELL_TOKENS_NOT_TRANSFERABLE_AFTER_ALL_BALANCE_SELL',
     },
     TR_BUY_STATUS_PENDING: {
         defaultMessage: 'Pending',

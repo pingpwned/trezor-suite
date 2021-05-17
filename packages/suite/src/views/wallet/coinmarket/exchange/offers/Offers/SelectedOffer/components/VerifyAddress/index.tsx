@@ -59,6 +59,13 @@ const ButtonWrapper = styled.div`
     margin: 20px 0;
 `;
 
+const FormNoteWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px 20px;
+`;
+
 const Confirmed = styled.div`
     display: flex;
     height: 60px;
@@ -92,6 +99,8 @@ const VerifyAddressComponent = () => {
         selectedQuote,
         addressVerified,
         receiveSymbol,
+        setReceiveAddress,
+        formNoteTranslationId,
     } = useCoinmarketExchangeOffersContext();
     const [selectedAccountOption, setSelectedAccountOption] = useState<AccountSelectOption>();
     const { register, watch, errors, formState, setValue } = useForm<FormState>({
@@ -104,6 +113,7 @@ const VerifyAddressComponent = () => {
     );
 
     const { address, extraField } = watch();
+    setReceiveAddress(address);
 
     const extraFieldDescription = selectedQuote?.extraFieldDescription
         ? {
@@ -260,6 +270,14 @@ const VerifyAddressComponent = () => {
                         </Button>
                     )}
                 </ButtonWrapper>
+            )}
+            {formNoteTranslationId && (
+                <FormNoteWrapper>
+                    <Translation
+                        id={formNoteTranslationId}
+                        values={{ symbol: receiveSymbol?.toUpperCase() }}
+                    />
+                </FormNoteWrapper>
             )}
         </Wrapper>
     );

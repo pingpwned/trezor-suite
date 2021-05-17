@@ -1,4 +1,4 @@
-import { AppState } from '@suite-types';
+import { AppState, ExtendedMessageDescriptor } from '@suite-types';
 import { Account } from '@wallet-types';
 import { ExchangeTrade } from 'invity-api';
 import { Timer } from '@suite-hooks/useTimeInterval';
@@ -38,6 +38,7 @@ export type ContextValues = {
     receiveSymbol?: string;
     receiveAccount?: Account;
     setReceiveAccount: (account?: Account) => void;
+    setReceiveAddress: (address?: string) => void;
     saveTrade: (
         exchangeTrade: ExchangeTrade,
         account: Account,
@@ -47,4 +48,5 @@ export type ContextValues = {
     sendTransaction: () => void;
     REFETCH_INTERVAL_IN_SECONDS: number;
     timer: Timer;
+    formNoteTranslationId: ExtendedMessageDescriptor['id'] | undefined;
 };
