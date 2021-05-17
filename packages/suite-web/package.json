@@ -20,8 +20,7 @@
         "react-redux": "^7.2.2",
         "react-router": "^5.2.0",
         "react-router-dom": "^5.2.0",
-        "styled-components": "5.1.1",
-        "ua-parser-js": "^0.7.28"
+        "styled-components": "5.1.1"
     },
     "devDependencies": {
         "@trezor/suite-build": "21.6.0",
@@ -30,7 +29,6 @@
         "@types/react-helmet": "^6.1.0",
         "@types/react-redux": "^7.1.7",
         "@types/react-router": "^5.1.11",
-        "@types/react-router-dom": "^5.1.7",
-        "@types/ua-parser-js": "^0.7.35"
+        "@types/react-router-dom": "^5.1.7"
     }
 }

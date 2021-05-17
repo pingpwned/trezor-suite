@@ -19,6 +19,7 @@ const htmlConfig = {
         isOnionLocation: FLAGS.ONION_LOCATION_META,
     },
     inject: 'body' as const,
+    scriptLoading: 'blocking' as const,
 };
 
 const baseDir = getPathForProject('web');
@@ -26,26 +27,6 @@ const config: webpack.Configuration = {
     entry: [path.join(baseDir, 'src', 'index.ts')],
     output: {
         path: path.join(baseDir, 'build'),
-    },
-    module: {
-        rules: [
-            // CSS
-            {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                mode: 'local',
-                                localIdentName: '[name]__[local]',
-                            },
-                        },
-                    },
-                ],
-            },
-        ],
     },
     plugins: [
         new CopyPlugin({
