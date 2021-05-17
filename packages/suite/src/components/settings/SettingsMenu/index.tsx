@@ -26,7 +26,7 @@ const SettingsMenu = () => {
 
     return (
         <AppNavigationPanel
-            maxWidth="default"
+            maxWidth="768px"
             title={
                 <span
                     aria-hidden="true"
