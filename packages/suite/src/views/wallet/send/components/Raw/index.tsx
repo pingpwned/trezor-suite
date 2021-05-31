@@ -61,9 +61,6 @@ const Raw = ({ network }: { network: Network }) => {
 
     return (
         <Wrapper>
-            <IconWrapper>
-                <Icon size={20} icon="CROSS" onClick={() => sendRaw(false)} />
-            </IconWrapper>
             <StyledCard>
                 <Textarea
                     state={inputState}
@@ -88,6 +85,9 @@ const Raw = ({ network }: { network: Network }) => {
                         <Tooltip content={<Translation id="SEND_RAW_TRANSACTION_TOOLTIP" />} dashed>
                             <Translation id="SEND_RAW_TRANSACTION" />
                         </Tooltip>
+                    }
+                    labelRight={
+                        <Icon size={20} icon="CROSS" onClick={() => sendRaw(false)} />
                     }
                 />
             </StyledCard>
