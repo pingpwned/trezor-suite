@@ -68,6 +68,31 @@ const ItemTitle = styled.span<ComponentProps>`
     color: ${props => props.theme.TYPE_LIGHT_GREY};
     font-weight: ${variables.FONT_WEIGHT.MEDIUM};
 
+    &:after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        z-index: -1;
+        border-radius: 8px;
+        transition: all 150ms ease-out;
+        background-color: transparent;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+        &:after {
+            background-color: ${props => props.theme.BG_HOVER_ITEM};
+            top: -8px;
+            left: -8px;
+            bottom: -8px;
+            right: -8px;
+        }
+    }
+
     ${props =>
         props.isActive &&
         css`

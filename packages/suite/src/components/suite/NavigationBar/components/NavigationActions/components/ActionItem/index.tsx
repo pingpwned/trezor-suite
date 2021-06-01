@@ -12,9 +12,29 @@ const Wrapper = styled.div<Pick<Props, 'isOpen' | 'marginLeft'>>`
     justify-content: center;
     border-radius: 8px;
     ${props => props.marginLeft && `margin-left: 8px`};
+    transition: background-color 150ms ease-out;
+
+    &:after {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        right: 4px;
+        bottom: 4px;
+        z-index: -1;
+        border-radius: 8px;
+        transition: all 150ms ease-out;
+        background-color: transparent;
+    }
 
     &:hover {
-        background: ${props => props.theme.BG_GREY_OPEN};
+        &:after {
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            background-color: ${props => props.theme.BG_HOVER_ITEM};
+        }
     }
 
     ${props =>

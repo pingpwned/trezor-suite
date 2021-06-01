@@ -77,6 +77,8 @@ const StyledNavLink = styled.div<{ active?: boolean }>`
     &:last-child {
         margin-right: ${SECONDARY_MENU_BUTTON_MARGIN};
     }
+
+    position: relative;
 `;
 
 const IconWrapper = styled.div`
@@ -96,6 +98,33 @@ const StyledBackLink = styled.div`
 
 const Text = styled.div`
     position: relative;
+`;
+
+const TextHover = styled.div`
+    position: relative;
+    &:after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        border-radius: 8px;
+        transition: all 150ms ease-out;
+        background-color: transparent;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+        &:after {
+            background-color: ${props => props.theme.BG_HOVER_ITEM};
+            top: -8px;
+            left: -8px;
+            bottom: -8px;
+            right: -8px;
+        }
+    }
 `;
 
 const StyledIcon = styled(Icon)`
@@ -225,7 +254,7 @@ const AppNavigation = ({ items, primaryContent }: Props) => {
                                             </IconWrapper>
                                         )}
 
-                                        <Text>{title}</Text>
+                                        <TextHover>{title}</TextHover>
                                     </StyledNavLink>
                                 );
                             })}
